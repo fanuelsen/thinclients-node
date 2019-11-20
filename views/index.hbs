@@ -1,0 +1,60 @@
+<div id="lastmsg"></div>
+<h1>{{title}}</h1>
+<p>Welcome to {{title}}</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Navn</th>
+      <th scope="col">MAC</th>
+      <th scope="col">Gruppe</th>
+      <th scope="col">Oppdater</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#if clients}}
+    {{#each clients}}
+    <tr>
+      <td>{{this.name}}</td>
+      <td>{{this.mac}}</td>
+      <td>
+        <select id="sel_{{this.name}}">
+          {{#select this.settings}}
+          {{#each ../groups}}
+          <option value="{{this.name}}">{{this.name}}</option>
+          {{/each}}
+          {{/select}}
+        </select>
+      </td>
+      <td>
+        <button value="{{this.name}}">Oppdater</button>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+<script>
+  $("button").click(function () {
+    var obj = $(this).val();
+    $.ajax({
+      type: "PUT",
+      url: "/thinclient/" + obj,
+      data: {
+        settings: $("#sel_" + obj).val()
+      },
+      success: function (result) {
+        $("#lastmsg").html("<p>Oppdaterte <b>" + obj + "</b>!</p>");
+      },
+      error: function (result) {
+        $("#lastmsg").html("<p>Klarte ikke å oppdaterte <b>" + obj + "</b>:(!</p>");
+      }
+    });
+  });
+</script>
+{{else}}
+</tbody>
+</table>
+<div class="empty" style="display:none">
+  <p>Ingen data :(</p>
+</div>
+{{/if}}
