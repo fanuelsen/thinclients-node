@@ -7,6 +7,8 @@ router.post("/", async (request, response) => {
         var group = new GroupModel({
             name: request.body.name
         });
+        console.log(request.body);
+        console.log(group);
         var result = await group.save();
         response.send(result);
     } catch (error) {
