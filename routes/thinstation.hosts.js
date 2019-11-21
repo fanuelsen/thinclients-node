@@ -6,6 +6,7 @@ router.get("/", async (request, response) => {
     try {
         var result = await ThinClientModel.find().exec();
         response.setHeader('Content-type', 'application/octet-stream');
+        response.setHeader('Accept-Ranges', 'bytes');
         response.charset = 'UTF-8';
         response.write("# THINSTATION HOSTS");
         result.forEach(element => {
