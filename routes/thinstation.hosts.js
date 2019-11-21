@@ -8,7 +8,7 @@ router.get("/", async (request, response) => {
         response.setHeader('Content-disposition', 'attachment; filename=thinstation.hosts');
         response.setHeader('Content-type', 'text/plain');
         response.charset = 'UTF-8';
-        response.write("#########THINSTATION HOSTS");
+        response.write("# THINSTATION HOSTS");
         result.forEach(element => {
             response.write("\n" + element.name + "\t" + element.mac + "\t" + element.settings);
         });
