@@ -4,7 +4,11 @@ var ThinClientModel = require('../models/thinclient');
 
 router.post("/", async (request, response) => {
     try {
-        var thinclient = new ThinClientModel(request.body);
+        var thinclient = new ThinClientModel({
+            name: request.body.name,
+            mac: request.body.mac,
+            settings: request.body.settings
+        });
         var result = await thinclient.save();
         response.send(result);
     } catch (error) {

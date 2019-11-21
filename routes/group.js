@@ -4,7 +4,9 @@ var GroupModel = require('../models/group');
 
 router.post("/", async (request, response) => {
     try {
-        var group = new GroupModel(request.body);
+        var group = new GroupModel({
+            name: request.body.name
+        });
         var result = await group.save();
         response.send(result);
     } catch (error) {
