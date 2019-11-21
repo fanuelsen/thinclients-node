@@ -5,8 +5,7 @@ var ThinClientModel = require('../models/thinclient');
 router.get("/", async (request, response) => {
     try {
         var result = await ThinClientModel.find().exec();
-        response.setHeader('Content-disposition', 'attachment; filename=thinstation.hosts');
-        response.setHeader('Content-type', 'text/plain');
+        response.setHeader('Content-type', 'application/octet-stream');
         response.charset = 'UTF-8';
         response.write("# THINSTATION HOSTS");
         result.forEach(element => {
