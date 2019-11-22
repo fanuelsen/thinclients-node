@@ -9,11 +9,12 @@ router.get("/", async (request, response) => {
         result.forEach(element => {
             output += "\n" + element.name + "\t" + element.mac + "\t" + element.settings;
         });
+        var buf = Buffer.from(output);
         response.setHeader('Content-type', 'application/octet-stream');
         response.setHeader('Accept-Ranges', 'bytes');
-        response.setHeader('Content-Length', output.length);
+        response.setHeader('Content-Length', buf.length);
         response.setHeader('Cache-Control', 'public, max-age=0');
-        response.write(output);
+        response.write(buf);
         response.end();
     } catch (error) {
         response.status(500).send(error);
