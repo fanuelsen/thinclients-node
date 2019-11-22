@@ -9,7 +9,7 @@ router.get("/", async (request, response) => {
         result.forEach(element => {
             output += "\n" + element.name + "\t" + element.mac + "\t" + element.settings;
         });
-        var buf = Buffer.from(output);
+        var buf = Buffer.from(output, 'binary');
         response.setHeader('Content-type', 'application/octet-stream');
         response.setHeader('Accept-Ranges', 'bytes');
         response.setHeader('Content-Length', buf.length);
