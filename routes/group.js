@@ -11,7 +11,7 @@ router.post("/", async (request, response) => {
         });
         var result = await group.save();
         var fileContent = 'SCREEN_RESOLUTION="' + group.resolution + '"\nXRANDR_OPTIONS="dualscreen"';
-        fs.writeFile('../public/thinstation.conf.group-' + group.name, fileContent, function (error) {
+        fs.writeFile('/usr/src/app/public/thinstation.conf.group-' + group.name, fileContent, function (error) {
             if (error) { console.log(error) }
         });
         response.send(result);
