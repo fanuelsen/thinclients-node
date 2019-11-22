@@ -20,9 +20,6 @@ db.once('open', function callback () {
     console.log("connected to db");
 });
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true }));
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -38,8 +35,8 @@ hbs.registerHelper("select", function(value, options) {
 })
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

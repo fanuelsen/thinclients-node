@@ -1,15 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var GroupModel = require('../models/group');
+var fs = require('fs');
 
 router.post("/", async (request, response) => {
     try {
         var group = new GroupModel({
-            name: request.body.name
+            name: request.body.name,
+            resolution: request.body.resolution
         });
-        console.log(request.body);
-        console.log(group);
         var result = await group.save();
+        var fileContent = 'SCREEN_RESOLUTION="' + group.resolution + '"\nXRANDR_OPTIONS="dualscreen"';
+        fs.writeFile('../public/thinstation.conf.group-' + group.name, fileContent);
         response.send(result);
     } catch (error) {
         response.status(500).send(error);
