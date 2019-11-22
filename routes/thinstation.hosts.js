@@ -14,8 +14,8 @@ router.get("/", async (request, response) => {
         response.setHeader('Accept-Ranges', 'bytes');
         response.setHeader('Content-Length', buf.length);
         response.setHeader('Cache-Control', 'public, max-age=0');
-        response.write(buf);
-        response.end();
+        response.write(buf, 'binary');
+        response.end(null, 'binary');
     } catch (error) {
         response.status(500).send(error);
     }
