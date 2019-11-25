@@ -12,10 +12,7 @@ var thinclientRouter = require('./routes/thinclient');
 var thinstationHostsRouter = require('./routes/thinstation.hosts');
 
 var app = express();
-mongoose.connect('mongodb://localhost/thinclient', { 
-    useNewUrlParser: true, 
-    reconnectTries: 30
-});
+mongoose.connect('mongodb://localhost/thinclient', { useNewUrlParser: true });
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
