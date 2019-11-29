@@ -43,6 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/group', groupRouter);
 app.use('/thinclient', thinclientRouter);
+app.use('/thinstation.hosts', thinstationHostsRouter);
 app.use('/./thinstation.hosts', thinstationHostsRouter);
 
 // catch 404 and forward to error handler
