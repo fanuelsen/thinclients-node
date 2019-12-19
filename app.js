@@ -39,6 +39,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'thinstation')));
 
 app.use('/', indexRouter);
 app.use('/group', groupRouter);
