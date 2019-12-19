@@ -1,7 +1,4 @@
-<div id="lastmsg"></div>
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
-
+<div class="alert" id="lastmsg"></div>
 <table class="table">
   <thead>
     <tr>
@@ -18,7 +15,7 @@
       <td>{{this.name}}</td>
       <td>{{this.mac}}</td>
       <td>
-        <select id="sel_{{this.name}}">
+        <select class="form-control" id="sel_{{this.name}}">
           {{#select this.settings}}
           {{#each ../groups}}
           <option value="{{this.name}}">{{this.name}}</option>
@@ -27,7 +24,7 @@
         </select>
       </td>
       <td>
-        <button value="{{this.name}}">Oppdater</button>
+        <button class="btn btn-dark" value="{{this.name}}">Oppdater</button>
       </td>
     </tr>
     {{/each}}
@@ -43,10 +40,14 @@
         settings: $("#sel_" + obj).val()
       },
       success: function (result) {
-        $("#lastmsg").html("<p>Oppdaterte <b>" + obj + "</b>!</p>");
+        $("#lastmsg").removeClass("alert-danger");
+        $("#lastmsg").addClass("alert-success");
+        $("#lastmsg").html("Oppdaterte <strong>" + obj + "</strong>!");
       },
       error: function (result) {
-        $("#lastmsg").html("<p>Klarte ikke å oppdaterte <b>" + obj + "</b>:(!</p>");
+        $("#lastmsg").removeClass("alert-success");
+        $("#lastmsg").addClass("alert-danger");
+        $("#lastmsg").html("Klarte ikke å oppdatere <strong>" + obj + "</strong>!:(");
       }
     });
   });
