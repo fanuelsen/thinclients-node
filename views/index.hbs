@@ -1,17 +1,18 @@
 <div class="alert" id="lastmsg"></div>
-<table class="table">
-  <thead>
+<input id="filter" type="text" class="filter" placeholder="Filter...">
+<table id="allitems" class="table">
+  <thead align="center">
     <tr>
       <th scope="col">Navn</th>
       <th scope="col">MAC</th>
       <th scope="col">Gruppe</th>
-      <th scope="col">Oppdater</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     {{#if clients}}
     {{#each clients}}
-    <tr>
+    <tr align="center">
       <td>{{this.name}}</td>
       <td>{{this.mac}}</td>
       <td>
@@ -31,6 +32,15 @@
   </tbody>
 </table>
 <script>
+  $(document).ready(function () {
+    $("#filter").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#allitems tbody tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+    $("#lastmsg").hide();
+  });
   $("button").click(function () {
     var obj = $(this).val();
     $.ajax({
@@ -43,11 +53,13 @@
         $("#lastmsg").removeClass("alert-danger");
         $("#lastmsg").addClass("alert-success");
         $("#lastmsg").html("Oppdaterte <strong>" + obj + "</strong>!");
+        $("#lastmsg").show();
       },
       error: function (result) {
         $("#lastmsg").removeClass("alert-success");
         $("#lastmsg").addClass("alert-danger");
         $("#lastmsg").html("Klarte ikke å oppdatere <strong>" + obj + "</strong>!:(");
+        $("#lastmsg").show();
       }
     });
   });
