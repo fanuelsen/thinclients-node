@@ -3,7 +3,12 @@ var router = express.Router();
 var GroupModel = require('../models/group');
 var fs = require('fs');
 
-router.post("/", async (request, response) => {
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { return next(); }
+    res.redirect('/login');
+};
+
+router.post("/", ensureAuthenticated, async (request, response) => {
     try {
         var group = new GroupModel({
             name: request.body.name,
@@ -20,7 +25,7 @@ router.post("/", async (request, response) => {
     }
 });
 
-router.get("/", async (request, response) => {
+router.get("/", ensureAuthenticated, async (request, response) => {
     try {
         var result = await GroupModel.find().exec();
         response.send(result);
@@ -29,7 +34,7 @@ router.get("/", async (request, response) => {
     }
 });
 
-router.get("/:name", async (request, response) => {
+router.get("/:name", ensureAuthenticated, async (request, response) => {
     try {
         var group = await GroupModel.findOne({ name: request.params.name }).exec();
         response.send(group);
@@ -38,7 +43,7 @@ router.get("/:name", async (request, response) => {
     }
 });
 
-router.delete("/:name", async (request, response) => {
+router.delete("/:name", ensureAuthenticated, async (request, response) => {
     try {
         var result = await GroupModel.deleteOne({ name: request.params.name }).exec();
         response.send(result);

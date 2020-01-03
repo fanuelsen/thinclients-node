@@ -1,9 +1,12 @@
+'use strict';
+
 require('dotenv').config()
 
+var https = require('https');
 var createError = require('http-errors');
 var express = require('express');
 var expressSession = require('express-session');
-var mongoose = require('mongoose');
+var mongoose = require('./database');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -54,12 +57,13 @@ passport.use(new OIDCStrategy({
   issuer: config.creds.issuer,
   passReqToCallback: config.creds.passReqToCallback,
   useCookieInsteadOfSession: config.creds.useCookieInsteadOfSession,
+  cookieEncryptionKeys: config.creds.cookieEncryptionKeys,
   scope: config.creds.scope,
   loggingLevel: config.creds.loggingLevel,
   nonceLifetime: config.creds.nonceLifetime,
   nonceMaxAmount: config.creds.nonceMaxAmount,
   clockSkew: config.creds.clockSkew,
-},
+  },
   function (iss, sub, profile, accessToken, refreshToken, done) {
     if (!profile.oid) {
       return done(new Error("No oid found"), null);
@@ -82,28 +86,13 @@ passport.use(new OIDCStrategy({
 var app = express();
 
 app.use(expressSession({
-  store: new mongoStore({
-    mongooseConnection: mongoose.connection,
-    collection: 'session',
-  })
-}));
-
-var sessionStore = mongoose.connect(config.databaseUri);
-app.use(express.session({
   secret: 'secret',
   cookie: { maxAge: config.mongoDBSessionMaxAge * 1000 },
   store: new MongoStore({
-    mongooseConnection: userStore.connection,
+    mongooseConnection: mongoose.sessionStore,
     clear_interval: config.mongoDBSessionMaxAge
   })
 }));
-
-var db = mongoose.connect(process.env.MONGO_CONN_STRING, { useNewUrlParser: true });
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback () {
-    console.log("connected to db");
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -133,6 +122,39 @@ app.use('/group', groupRouter);
 app.use('/thinclient', thinclientRouter);
 app.use('/thinstation.hosts', thinstationHostsRouter);
 app.use('/./thinstation.hosts', thinstationHostsRouter);
+
+app.get('/login',
+  function (req, res, next) {
+    passport.authenticate('azuread-openidconnect',
+      {
+        response: res,
+        failureRedirect: '/'
+      }
+    )(req, res, next);
+  },
+  function (req, res) {
+    res.redirect('/');
+  });
+
+app.post('/auth/openid/return',
+  function (req, res, next) {
+    passport.authenticate('azuread-openidconnect',
+      {
+        response: res,
+        failureRedirect: '/'
+      }
+    )(req, res, next);
+  },
+  function (req, res) {
+    res.redirect('/');
+  });
+
+app.get('/logout', function (req, res) {
+  req.session.destroy(function (err) {
+    req.logOut();
+    res.redirect(config.destroySessionUrl);
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

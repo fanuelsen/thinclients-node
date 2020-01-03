@@ -17,7 +17,7 @@
     clockSkew: null,
 };
 
-exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000';
+exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=' + process.env.BASE_URL;
 exports.useMongoDBSessionStore = true;
 exports.databaseUri = process.env.MONGO_SESSION_STORE;
 exports.mongoDBSessionMaxAge = 24 * 60 * 60;

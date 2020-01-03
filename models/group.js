@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require('../database');
 var Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
@@ -6,4 +6,4 @@ var GroupSchema = new Schema({
     resolution: { type: String, required: true }
 });
 
-module.exports = mongoose.model('group', GroupSchema)
+module.exports = mongoose.db.model('group', GroupSchema)

@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require('../database');
 var Schema = mongoose.Schema;
 
 var ThinClientSchema = new Schema({
@@ -17,4 +17,4 @@ var ThinClientSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('thinclient', ThinClientSchema)
+module.exports = mongoose.db.model('thinclient', ThinClientSchema)
