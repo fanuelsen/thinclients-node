@@ -13,7 +13,7 @@ var ThinClientSchema = new Schema({
     },
     settings: {
         type: String,
-        default: "1440"
+        default: "1280"
     }
 });
 
